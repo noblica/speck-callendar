@@ -1,3 +1,4 @@
+import { SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/clerk-react'
 import { createFileRoute } from '@tanstack/react-router'
 import { useEffect } from 'react'
 
@@ -15,5 +16,14 @@ function RouteComponent() {
   }, [])
 
 
-  return <div>Hello "/login"!</div>
+  // return <div>Hello "/login"!</div>
+  return (
+    <header className="p-2">
+      <SignedOut>
+        <SignInButton>
+          <button className="border border-1 cursor-pointer">Sign In</button>
+        </SignInButton>
+      </SignedOut>
+    </header>
+  )
 }
