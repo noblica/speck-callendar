@@ -1,13 +1,10 @@
 import { addDays, subDays } from "date-fns";
 import { useState } from "react";
+import type { CalendarEvent } from "../api/getCalendarEvents";
 
-type CalendarEvent = {
-  name: string;
-  start: string;
-  end: string;
-}
-
-export default function Day(props: { calendarEvents?: CalendarEvent[] }) {
+export default function Day(props: {
+  calendarEvents?: CalendarEvent[] | null
+}) {
   const [visibleDate, setVisibleDate] = useState(new Date())
 
   if (!props.calendarEvents) {

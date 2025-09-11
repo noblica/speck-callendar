@@ -1,15 +1,12 @@
-import { useAuth } from '@clerk/clerk-react'
-import { createFileRoute } from '@tanstack/react-router'
-import { useEffect, useState } from 'react';
-import Week from '../components/Week';
+import { useAuth } from '@clerk/clerk-react';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { createFileRoute } from '@tanstack/react-router';
+import { useState } from 'react';
 import Day from '../components/Day';
 import Month from '../components/Month';
-
-type GroupedEvents = {
-  name: string;
-  start: string;
-  end: string;
-}[]
+import Week from '../components/Week';
+import { getCalendarEvents } from '../api/getCalendarEvents';
+import { refreshCalendarData } from '../api/refreshCalendarData';
 
 export const Route = createFileRoute('/calendar')({
   component: Calendar,
@@ -18,38 +15,51 @@ export const Route = createFileRoute('/calendar')({
 function Calendar() {
   const { getToken } = useAuth();
 
-  const [calendarEvents, setCalendarEvents] = useState<GroupedEvents>()
   const [selectedView, setSelectedView] = useState("week")
 
-  const refreshEventData = async () => {
-    const token = await getToken()
-    await fetch("http://localhost:8080/api/refresh", {
-      headers: {
-        Authorization: `Bearer ${token}`
+  const queryClient = useQueryClient()
+
+  // Executed when the user clicks the "Refresh Calendar Data" button
+  const refreshDataMutation = useMutation({
+    mutationFn: async () => {
+      const token = await getToken();
+      if (!token) {
+        return null;
       }
-    }).then(res => res.json())
+      return refreshCalendarData(token)
+    },
+    onSuccess: () => {
+      // Invalidate and refetch
+      queryClient.invalidateQueries({ queryKey: ['calendar-events'] })
+    },
+  })
 
-    getEvents();
-  }
-
-  const getEvents = async () => {
-    const token = await getToken()
-    const events: Array<{ name: string, start: string, end: string }> = await fetch("http://localhost:8080/api/events", {
-      headers: {
-        Authorization: `Bearer ${token}`
+  // Executed on load and after refreshDataMutation is done updating the DB.
+  const calendarEventsQuery = useQuery({
+    queryKey: ['calendar-events'],
+    queryFn: async () => {
+      const token = await getToken();
+      if (!token) {
+        return null
       }
-    }).then(res => res.json())
+      return getCalendarEvents(token)
+    }
+  });
 
-    setCalendarEvents(events);
+  if (calendarEventsQuery.isLoading) {
+    return <p>Loading...</p>
   }
-
-  useEffect(() => {
-    getEvents()
-  }, [])
 
   return (
     <div className="p-2">
-      <button className="border border-black hover:cursor-pointer" onClick={() => refreshEventData()}>Refresh Calendar Data</button>
+      <button
+        className="border border-black hover:cursor-pointer"
+        onClick={() => refreshDataMutation.mutate()}
+        disabled={refreshDataMutation.isPending}
+      >
+        {refreshDataMutation.isPending && "Refreshing DB data..."}
+        {(refreshDataMutation.isIdle || refreshDataMutation.isSuccess) && "Refresh Calendar Data"}
+      </button>
       <br />
 
       <select
@@ -62,18 +72,26 @@ function Calendar() {
         <option value='month'>Month</option>
       </select>
 
+      {calendarEventsQuery.isFetching && (
+        <p>Fetching calendar events...</p>
+      )}
 
       {selectedView === "day" && (
-        <Day calendarEvents={calendarEvents} />
+        <Day
+          calendarEvents={calendarEventsQuery.data}
+        />
       )}
       {selectedView === "week" && (
-        <Week calendarEvents={calendarEvents} />
+        <Week
+          calendarEvents={calendarEventsQuery.data}
+        />
       )}
       {selectedView === "month" && (
-        <Month calendarEvents={calendarEvents} />
+        <Month calendarEvents={calendarEventsQuery.data} />
       )}
 
     </div>
   )
 }
+
 
