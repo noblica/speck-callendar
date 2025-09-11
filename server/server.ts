@@ -5,9 +5,9 @@ import 'dotenv/config';
 import { eq } from 'drizzle-orm';
 import type { Request, Response } from 'express';
 import express from "express";
-import { google } from 'googleapis';
 import { db } from './src/db/db';
 import { eventsTable } from './src/db/schema';
+import { getGoogleCalendarEvents } from './src/services/google';
 
 const app = express();
 
@@ -70,16 +70,3 @@ app.listen(8080, () => {
   console.log("server started at port 8080")
 })
 
-async function getGoogleCalendarEvents(oauthToken: string, minimumDate: Date, maximumDate: Date, nextPageToken?: string) {
-  return google.calendar("v3").events.list({
-    calendarId: "primary",
-    eventTypes: ["default"],
-    singleEvents: true,
-    timeMin: minimumDate.toISOString(),
-    timeMax: maximumDate.toISOString(),
-    maxResults: 2500,
-    pageToken: nextPageToken,
-
-    oauth_token: oauthToken,
-  });
-}
