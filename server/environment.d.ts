@@ -5,6 +5,9 @@ declare global {
       CLERK_SECRET_KEY: string,
       DATABASE_URL: string,
 
+      GOOGLE_OAUTH_CLIENT_ID: string,
+      GOOGLE_OAUTH_CLIENT_SECRET: string,
+      GOOGLE_OAUTH_REDIRECT_URL: string
     }
   }
 }
