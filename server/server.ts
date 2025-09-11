@@ -6,8 +6,8 @@ import { eq } from 'drizzle-orm';
 import type { Request, Response } from 'express';
 import express from "express";
 import { google } from 'googleapis';
-import { db } from './src/db';
-import { eventsTable } from './src/schema';
+import { db } from './src/db/db';
+import { eventsTable } from './src/db/schema';
 
 const app = express();
 
