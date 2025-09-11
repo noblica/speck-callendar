@@ -11,7 +11,7 @@ function RouteComponent() {
   const navigate = useNavigate();
 
   if (isSignedIn) {
-    navigate({ to: '/calendar' })
+    navigate({ to: '/calendar', replace: true })
   }
 
   const fetchApi = async () => {

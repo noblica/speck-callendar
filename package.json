@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "pnpm client:build && pnpm -C ./server run start",
     "server:start": "pnpm -C ./server run start",
     "server:dev": "pnpm -C ./server run dev",
     "client:dev": "pnpm -C ./client run dev",
