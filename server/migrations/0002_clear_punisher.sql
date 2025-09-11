@@ -1,0 +1,1 @@
+ALTER TABLE "events_table" ADD COLUMN "email" text NOT NULL;

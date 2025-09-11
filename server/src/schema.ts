@@ -2,6 +2,7 @@ import { pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
 
 export const eventsTable = pgTable('events_table', {
   id: serial('id').primaryKey(),
+  email: text('email').notNull(),
   name: text('name').notNull(),
   start: timestamp("start").notNull(),
   end: timestamp("end").notNull(),
