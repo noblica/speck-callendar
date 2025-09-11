@@ -1,12 +1,19 @@
-import { SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/clerk-react'
-import { createFileRoute } from '@tanstack/react-router'
-import { useEffect } from 'react'
+import { SignedOut, SignInButton, useUser } from '@clerk/clerk-react';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import { useEffect } from 'react';
 
 export const Route = createFileRoute('/login')({
   component: RouteComponent,
 })
 
 function RouteComponent() {
+  const { isSignedIn } = useUser();
+  const navigate = useNavigate();
+
+  if (isSignedIn) {
+    navigate({ to: '/calendar' })
+  }
+
   const fetchApi = async () => {
     const response = await fetch("http://localhost:8080/api").then(res => res.json())
     console.log(response)
@@ -21,7 +28,7 @@ function RouteComponent() {
     <header className="p-2">
       <SignedOut>
         <SignInButton>
-          <button className="border border-1 cursor-pointer">Sign In</button>
+          <button className="border cursor-pointer">Sign In</button>
         </SignInButton>
       </SignedOut>
     </header>

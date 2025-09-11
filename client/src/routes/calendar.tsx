@@ -1,6 +1,6 @@
-import { useAuth } from '@clerk/clerk-react';
+import { useAuth, useUser } from '@clerk/clerk-react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
 import Day from '../components/Day';
 import Month from '../components/Month';
@@ -14,6 +14,12 @@ export const Route = createFileRoute('/calendar')({
 
 function Calendar() {
   const { getToken } = useAuth();
+  const { isSignedIn } = useUser();
+  const navigate = useNavigate();
+
+  if (!isSignedIn) {
+    navigate({ to: '/login' })
+  }
 
   const [selectedView, setSelectedView] = useState("week")
 
@@ -58,7 +64,7 @@ function Calendar() {
         disabled={refreshDataMutation.isPending}
       >
         {refreshDataMutation.isPending && "Refreshing DB data..."}
-        {(refreshDataMutation.isIdle || refreshDataMutation.isSuccess) && "Refresh Calendar Data"}
+        {!refreshDataMutation.isPending && "Refresh Calendar Data"}
       </button>
       <br />
 

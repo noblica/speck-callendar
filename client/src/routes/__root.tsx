@@ -24,14 +24,14 @@ const RootLayout = () => (
             Login
           </Link>{' '}
         </SignedOut>
-        <Link to="/calendar" className="[&.active]:font-bold">
-          Calendar
-        </Link>
-        <div className="ml-auto">
-          <SignedIn>
+        <SignedIn>
+          <Link to="/calendar" className="[&.active]:font-bold">
+            Calendar
+          </Link>
+          <div className="ml-auto">
             <UserButton />
-          </SignedIn>
-        </div>
+          </div>
+        </SignedIn>
       </div>
       <hr />
       <Outlet />
