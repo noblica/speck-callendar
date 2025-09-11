@@ -9,7 +9,7 @@ import { eq } from 'drizzle-orm';
 const baseRouter = Router();
 
 // Fetch events from db, and sort them by start time
-baseRouter.get("/api/events", async (req: Request, res: Response) => {
+baseRouter.get("/events", async (_, res: Response) => {
   const eventsData = await db.select({
     name: eventsTable.name,
     start: eventsTable.start,
@@ -22,7 +22,7 @@ baseRouter.get("/api/events", async (req: Request, res: Response) => {
 })
 
 // Refetch the google calendar events for the logged in user, and replace the old event data with the new event data in our db.
-baseRouter.get("/api/refresh", requireAuth(), async (req: Request, res: Response) => {
+baseRouter.get("/refresh", requireAuth(), async (req: Request, res: Response) => {
   const { userId } = getAuth(req);
   if (!userId) {
     return;
