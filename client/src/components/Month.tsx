@@ -34,9 +34,10 @@ export default function Month(props: { calendarEvents?: CalendarEvent[] | null }
         {datesToShow.map(dateItem => {
           const dateEvents = groupedCalendarEvents?.[dateItem.toLocaleDateString()];
           return (
-            <div key={dateItem.toLocaleDateString()} className="border border-black p-2">
+            <div key={dateItem.toLocaleDateString()} className="border border-white p-2">
               <p className="font-bold">{dateItem.toLocaleDateString()} - {endOfWeek(dateItem).toLocaleDateString()}</p>
-              <ul>
+              <hr className="my-2" />
+              <ul className="flex flex-col gap-5">
                 {!dateEvents && <p>No events scheduled for this date!</p>}
                 {dateEvents?.map((event: { name: string, start: string, end: string }) => (
                   <li key={event.start}>

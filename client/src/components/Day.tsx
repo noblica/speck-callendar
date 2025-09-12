@@ -26,9 +26,10 @@ export default function Day(props: {
       </div>
 
       <div className="flex flex-col gap-5 mt-5">
-        <div className="border border-black p-2">
+        <div className="border border-white p-2">
           <p className="font-bold">{visibleDate.toLocaleDateString()}</p>
-          <ul>
+          <hr className="my-2" />
+          <ul className="flex flex-col gap-5">
             {!dateEvents && <p>No events scheduled for this date!</p>}
             {dateEvents?.map((event: { name: string, start: string, end: string }) => (
               <li key={event.start}>

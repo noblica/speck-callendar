@@ -38,9 +38,10 @@ export default function Week(props: {
         {datesToShow.map(dateItem => {
           const dateEvents = groupedCalendarEvents?.[dateItem.toLocaleDateString()];
           return (
-            <div key={dateItem.toLocaleDateString()} className="border border-black p-2">
+            <div key={dateItem.toLocaleDateString()} className="border border-white p-2">
               <p className="font-bold">{dateItem.toLocaleDateString()}</p>
-              <ul>
+              <hr className="my-2" />
+              <ul className="flex flex-col gap-5">
                 {/* If we have no events to display for a selected date */}
                 {!dateEvents && <p>No events scheduled for this date!</p>}
 
