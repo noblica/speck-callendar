@@ -2,12 +2,11 @@ import { useAuth, useUser } from '@clerk/clerk-react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
+import { getCalendarEvents } from '../api/events';
+import { refreshCalendarData } from '../api/refresh';
 import Day from '../components/Day';
 import Month from '../components/Month';
 import Week from '../components/Week';
-import { createCalendarEvent, getCalendarEvents } from '../api/events';
-import { refreshCalendarData } from '../api/refresh';
-import { addMinutes } from 'date-fns';
 
 export const Route = createFileRoute('/calendar')({
   component: Calendar,
@@ -41,21 +40,6 @@ function Calendar() {
     },
   })
 
-  // Executed when the user clicks the "Create New Event" button
-  const createEventMutation = useMutation({
-    mutationFn: async (eventData: { summary: string, start: string, end: string }) => {
-      const token = await getToken();
-      if (!token) {
-        return null;
-      }
-      return createCalendarEvent(token, eventData)
-    },
-    onSuccess: () => {
-      // Invalidate and refetch
-      queryClient.invalidateQueries({ queryKey: ['calendar-events'] })
-    },
-  })
-
   // Executed on load and after refreshDataMutation is done updating the DB.
   const calendarEventsQuery = useQuery({
     queryKey: ['calendar-events'],
@@ -81,19 +65,6 @@ function Calendar() {
       >
         {refreshDataMutation.isPending && "Refreshing DB data..."}
         {!refreshDataMutation.isPending && "Refresh Calendar Data"}
-      </button>
-
-      <br />
-
-      <button
-        className="border border-black hover:cursor-pointer"
-        onClick={() => createEventMutation.mutate({
-          summary: 'test',
-          start: (new Date()).toISOString(),
-          end: addMinutes(new Date(), 30).toISOString()
-        })}
-      >
-        Create event
       </button>
 
       <br />

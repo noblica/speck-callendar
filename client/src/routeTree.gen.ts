@@ -10,12 +10,18 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as CreateEventRouteImport } from './routes/create-event'
 import { Route as CalendarRouteImport } from './routes/calendar'
 import { Route as IndexRouteImport } from './routes/index'
 
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CreateEventRoute = CreateEventRouteImport.update({
+  id: '/create-event',
+  path: '/create-event',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CalendarRoute = CalendarRouteImport.update({
@@ -32,30 +38,34 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/calendar': typeof CalendarRoute
+  '/create-event': typeof CreateEventRoute
   '/login': typeof LoginRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/calendar': typeof CalendarRoute
+  '/create-event': typeof CreateEventRoute
   '/login': typeof LoginRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/calendar': typeof CalendarRoute
+  '/create-event': typeof CreateEventRoute
   '/login': typeof LoginRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/calendar' | '/login'
+  fullPaths: '/' | '/calendar' | '/create-event' | '/login'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/calendar' | '/login'
-  id: '__root__' | '/' | '/calendar' | '/login'
+  to: '/' | '/calendar' | '/create-event' | '/login'
+  id: '__root__' | '/' | '/calendar' | '/create-event' | '/login'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CalendarRoute: typeof CalendarRoute
+  CreateEventRoute: typeof CreateEventRoute
   LoginRoute: typeof LoginRoute
 }
 
@@ -66,6 +76,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/create-event': {
+      id: '/create-event'
+      path: '/create-event'
+      fullPath: '/create-event'
+      preLoaderRoute: typeof CreateEventRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/calendar': {
@@ -88,6 +105,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CalendarRoute: CalendarRoute,
+  CreateEventRoute: CreateEventRoute,
   LoginRoute: LoginRoute,
 }
 export const routeTree = rootRouteImport

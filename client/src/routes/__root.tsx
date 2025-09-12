@@ -26,6 +26,9 @@ const RootLayout = () => (
           <Link to="/calendar" className="[&.active]:font-bold">
             Calendar
           </Link>
+          <Link to="/create-event" className="[&.active]:font-bold">
+            Create Event
+          </Link>
           <div className="ml-auto">
             <UserButton />
           </div>
