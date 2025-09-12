@@ -13,8 +13,8 @@ app.use(express.static(path.join(__dirname, '../client/dist')));
 app.use(cors({
   origin: ["http://localhost:5173"],
 }))
-
 app.use(clerkMiddleware())
+app.use(express.json())
 
 // Defined BE routes
 app.use("/api", baseRouter)

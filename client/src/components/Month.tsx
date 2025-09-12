@@ -1,6 +1,6 @@
 import { addMonths, eachWeekOfInterval, endOfMonth, endOfWeek, startOfMonth, startOfWeek, subMonths } from "date-fns";
 import { useState } from "react";
-import type { CalendarEvent } from "../api/getCalendarEvents";
+import type { CalendarEvent } from "../api/events";
 
 export default function Month(props: { calendarEvents?: CalendarEvent[] | null }) {
   const currentDate = new Date();

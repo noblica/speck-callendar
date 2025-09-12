@@ -1,6 +1,6 @@
 import { addDays, subDays } from "date-fns";
 import { useState } from "react";
-import type { CalendarEvent } from "../api/getCalendarEvents";
+import type { CalendarEvent } from "../api/events";
 
 export default function Day(props: {
   calendarEvents?: CalendarEvent[] | null

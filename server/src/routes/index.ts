@@ -3,13 +3,13 @@ import { db } from '../db/db';
 import { eventsTable } from '../db/schema';
 import { clerkClient, getAuth, requireAuth } from '@clerk/express';
 import { addMonths, endOfDay, startOfDay, subMonths } from 'date-fns';
-import { getGoogleCalendarEvents } from '../services/google';
+import { createGoogleCalendarEvent, getGoogleCalendarEvents } from '../services/google';
 import { eq } from 'drizzle-orm';
 
 const baseRouter = Router();
 
 // Fetch events from db, and sort them by start time
-baseRouter.get("/events", async (_, res: Response) => {
+baseRouter.get("/events", requireAuth(), async (_, res: Response) => {
   const eventsData = await db.select({
     name: eventsTable.name,
     start: eventsTable.start,
@@ -21,6 +21,27 @@ baseRouter.get("/events", async (_, res: Response) => {
   res.json(eventsData);
 })
 
+// Create new event
+baseRouter.post("/events", requireAuth(), async (req: Request, res: Response) => {
+  const { userId } = getAuth(req);
+  if (!userId) {
+    return;
+  }
+
+  const newEvent: { summary: string, start: string, end: string } = req.body
+  await createGoogleCalendarEvent(userId, newEvent)
+
+  const user = await clerkClient.users.getUser(userId);
+
+  const dbResult = await db.insert(eventsTable).values([{
+    name: newEvent.summary,
+    start: new Date(newEvent.start),
+    end: new Date(newEvent.end),
+    email: user.emailAddresses[0].emailAddress,
+  }])
+  res.json(dbResult)
+});
+
 // Refetch the google calendar events for the logged in user, and replace the old event data with the new event data in our db.
 baseRouter.get("/refresh", requireAuth(), async (req: Request, res: Response) => {
   const { userId } = getAuth(req);
@@ -28,9 +49,8 @@ baseRouter.get("/refresh", requireAuth(), async (req: Request, res: Response) =>
     return;
   }
 
-  // Get the google oauth token from clerk 
-  const oauthToken = await clerkClient.users.getUserOauthAccessToken(userId!, "google").then(response => response.data[0].token)
-  const user = await clerkClient.users.getUser(userId!)
+  // Get user google data from clerk 
+  const user = await clerkClient.users.getUser(userId)
 
   const currentDate = new Date();
   const minimumDate = startOfDay(subMonths(currentDate, 6))
@@ -39,9 +59,9 @@ baseRouter.get("/refresh", requireAuth(), async (req: Request, res: Response) =>
   let nextPageToken: string | null | undefined = '1';
   let eventsToReturn: Array<{ name: string, start: Date, end: Date, email: string }> = [];
 
-  // Recursively fetch the event data, until the nextPageToken is no longer present
+  // Recursively fetch the event data from the google API, until the nextPageToken is no longer present
   while (nextPageToken) {
-    const eventsResponse = await getGoogleCalendarEvents(oauthToken, minimumDate, maximumDate, nextPageToken === '1' ? undefined : nextPageToken)
+    const eventsResponse = await getGoogleCalendarEvents(userId, minimumDate, maximumDate, nextPageToken === '1' ? undefined : nextPageToken)
     const eventsMapped = eventsResponse.data.items?.map(event => ({
       name: event.summary ?? "",
       start: new Date(event.start?.dateTime ?? event.start?.date ?? ""),
