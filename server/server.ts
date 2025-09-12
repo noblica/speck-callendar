@@ -6,6 +6,7 @@ import baseRouter from './src/routes';
 import path from 'path';
 
 const app = express();
+const port = process.env.PORT || 8080
 
 // Serve the client app
 app.use(express.static(path.join(__dirname, '../client/dist')));
@@ -24,7 +25,7 @@ app.get(/(.*)/, (_, res) => {
   res.sendFile(path.join(__dirname, '../client/dist', 'index.html'));
 });
 
-app.listen(8080, () => {
-  console.log("server started at port 8080")
+app.listen(port, () => {
+  console.log(`server started at port ${port}`)
 })
 
