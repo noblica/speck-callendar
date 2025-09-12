@@ -9,13 +9,21 @@ import { eq } from 'drizzle-orm';
 const baseRouter = Router();
 
 // Fetch events from db, and sort them by start time
-baseRouter.get("/events", requireAuth(), async (_, res: Response) => {
+baseRouter.get("/events", requireAuth(), async (req: Request, res: Response) => {
+  const { userId } = getAuth(req);
+  if (!userId) {
+    return;
+  }
+
+  const user = await clerkClient.users.getUser(userId);
+
   const eventsData = await db.select({
     name: eventsTable.name,
     start: eventsTable.start,
     end: eventsTable.end,
   })
     .from(eventsTable)
+    .where(eq(eventsTable.email, user.emailAddresses[0].emailAddress))
     .orderBy(eventsTable.start);
 
   res.json(eventsData);
@@ -74,7 +82,9 @@ baseRouter.get("/refresh", requireAuth(), async (req: Request, res: Response) =>
 
   // Delete all events the user already has in the db, before inputing new data.
   await db.delete(eventsTable).where(eq(eventsTable.email, user.emailAddresses[0].emailAddress))
-  await db.insert(eventsTable).values(eventsToReturn)
+  if (eventsToReturn.length > 0) {
+    await db.insert(eventsTable).values(eventsToReturn)
+  }
 
   res.json(eventsToReturn)
 })

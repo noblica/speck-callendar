@@ -49,7 +49,7 @@ function Calendar() {
         return null
       }
       return getCalendarEvents(token)
-    }
+    },
   });
 
   if (calendarEventsQuery.isLoading) {
@@ -92,19 +92,33 @@ function Calendar() {
         <p>Fetching calendar events...</p>
       )}
 
-      {selectedView === "day" && (
-        <Day
-          calendarEvents={calendarEventsQuery.data}
-        />
-      )}
-      {selectedView === "week" && (
-        <Week
-          calendarEvents={calendarEventsQuery.data}
-        />
-      )}
-      {selectedView === "month" && (
-        <Month calendarEvents={calendarEventsQuery.data} />
-      )}
+      {/* If the fetching is done, but the user has no events in the DB, maybe it's the first time they logged in */}
+      {calendarEventsQuery.isSuccess &&
+        calendarEventsQuery.data?.length === 0 && (
+          <div className="text-center mt-5">
+            <p className="font-bold text-lg">You have no calendar events!</p>
+            <p>Please try clicking the "Refresh Calendar Data" button.</p>
+          </div>
+        )}
+
+      {calendarEventsQuery.isSuccess &&
+        (calendarEventsQuery.data?.length ?? 0) > 0 && (
+          <>
+            {selectedView === "day" && (
+              <Day
+                calendarEvents={calendarEventsQuery.data}
+              />
+            )}
+            {selectedView === "week" && (
+              <Week
+                calendarEvents={calendarEventsQuery.data}
+              />
+            )}
+            {selectedView === "month" && (
+              <Month calendarEvents={calendarEventsQuery.data} />
+            )}
+          </>
+        )}
 
     </div>
   )
