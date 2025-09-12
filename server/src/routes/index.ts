@@ -64,6 +64,7 @@ baseRouter.get("/refresh", requireAuth(), async (req: Request, res: Response) =>
   const minimumDate = startOfDay(subMonths(currentDate, 6))
   const maximumDate = endOfDay(addMonths(currentDate, 6))
 
+  // Set the initial state to '1', so the event list from google is fetched at least once.  
   let nextPageToken: string | null | undefined = '1';
   let eventsToReturn: Array<{ name: string, start: Date, end: Date, email: string }> = [];
 
@@ -82,6 +83,7 @@ baseRouter.get("/refresh", requireAuth(), async (req: Request, res: Response) =>
 
   // Delete all events the user already has in the db, before inputing new data.
   await db.delete(eventsTable).where(eq(eventsTable.email, user.emailAddresses[0].emailAddress))
+  // If the user has events scheduled, write them to our DB. 
   if (eventsToReturn.length > 0) {
     await db.insert(eventsTable).values(eventsToReturn)
   }

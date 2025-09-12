@@ -1,3 +1,5 @@
+// This service facilitates communication with the needed google endpoints.
+
 import { clerkClient } from "@clerk/express";
 import { google } from "googleapis";
 
@@ -56,3 +58,4 @@ async function getOAuthClient(clerkUserId: string) {
   client.setCredentials({ access_token: googleAccessToken })
   return client;
 }
+

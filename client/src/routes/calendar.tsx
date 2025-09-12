@@ -92,7 +92,7 @@ function Calendar() {
         <p>Fetching calendar events...</p>
       )}
 
-      {/* If the fetching is done, but the user has no events in the DB, maybe it's the first time they logged in */}
+      {/* If the fetching is done, but the user has no events in the DB, show the empty state suggesting the next action. */}
       {calendarEventsQuery.isSuccess &&
         calendarEventsQuery.data?.length === 0 && (
           <div className="text-center mt-5">

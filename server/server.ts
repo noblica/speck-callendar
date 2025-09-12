@@ -17,7 +17,7 @@ app.use(cors({
 app.use(clerkMiddleware())
 app.use(express.json())
 
-// Defined BE routes
+// Serve the defined BE routes
 app.use("/api", baseRouter)
 
 // All undefined BE routes get forwarded to the client navigation
