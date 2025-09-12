@@ -26,7 +26,7 @@ function RouteComponent() {
 
   // return <div>Hello "/login"!</div>
   return (
-    <header className="p-2">
+    <header className="p-2 flex justify-center">
       <SignedOut>
         <SignInButton>
           <BaseButton>Sign In</BaseButton>

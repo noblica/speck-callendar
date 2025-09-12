@@ -57,7 +57,7 @@ function Calendar() {
   }
 
   return (
-    <div className="p-2 flex flex-col gap-5">
+    <div className="p-2 flex flex-col gap-5 max-w-xl mx-auto">
       <BaseButton
         onClick={() => refreshDataMutation.mutate()}
         disabled={refreshDataMutation.isPending}

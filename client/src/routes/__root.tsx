@@ -16,7 +16,7 @@ const RootLayout = () => (
   <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
 
     <QueryClientProvider client={queryClient}>
-      <div className="p-2 flex items-center gap-2">
+      <div className="mx-auto max-w-7xl p-2 flex items-center gap-2">
         <SignedOut>
           <Link to="/login" className="[&.active]:font-bold">
             Login

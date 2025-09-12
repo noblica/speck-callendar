@@ -40,9 +40,9 @@ function RouteComponent() {
     },
   })
 
-  return <div className="p-2">
+  return (
     <form
-      className="flex flex-col gap-4"
+      className="mt-5 flex flex-col gap-4 max-w-xl items-center mx-auto"
       onSubmit={(event) => {
         event.preventDefault();
         const formData = new FormData(event.currentTarget);
@@ -65,7 +65,7 @@ function RouteComponent() {
     >
       <div className="flex gap-2">
         <label htmlFor="summary">Summary</label>
-        <input className="border" type="text" name="summary" required />
+        <input className="border w-full" type="text" name="summary" required />
       </div>
 
       <div className="flex gap-2">
@@ -84,5 +84,5 @@ function RouteComponent() {
         {!createEventMutation.isPending && "Submit"}
       </BaseButton>
     </form>
-  </div>
+  )
 }

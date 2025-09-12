@@ -23,14 +23,14 @@ export default function Month(props: { calendarEvents?: CalendarEvent[] | null }
 
   return (
     <>
-      <div className="flex gap-3">
+      <div className="flex items-center justify-center gap-3">
         <BaseButton
           onClick={() => setFirstVisibleDate(subMonths(firstVisibleDate, 1))}>Previous Month</BaseButton>
         <BaseButton
           onClick={() => setFirstVisibleDate(addMonths(firstVisibleDate, 1))}>Next Month</BaseButton>
       </div>
 
-      <div className="flex flex-col gap-5 mt-10">
+      <div className="flex flex-col gap-5 mt-5">
         {datesToShow.map(dateItem => {
           const dateEvents = groupedCalendarEvents?.[dateItem.toLocaleDateString()];
           return (

@@ -18,14 +18,14 @@ export default function Day(props: {
 
   return (
     <>
-      <div className="flex gap-3">
+      <div className="flex items-center justify-center gap-3">
         <BaseButton
           onClick={() => setVisibleDate(subDays(visibleDate, 1))}>Previous Day</BaseButton>
         <BaseButton
           onClick={() => setVisibleDate(addDays(visibleDate, 1))}>Next Day</BaseButton>
       </div>
 
-      <div className="flex flex-col gap-5 mt-10">
+      <div className="flex flex-col gap-5 mt-5">
         <div className="border border-black p-2">
           <p className="font-bold">{visibleDate.toLocaleDateString()}</p>
           <ul>
