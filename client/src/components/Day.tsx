@@ -1,6 +1,7 @@
 import { addDays, subDays } from "date-fns";
 import { useState } from "react";
 import type { CalendarEvent } from "../api/events";
+import BaseButton from "./BaseButton";
 
 export default function Day(props: {
   calendarEvents?: CalendarEvent[] | null
@@ -18,10 +19,10 @@ export default function Day(props: {
   return (
     <>
       <div className="flex gap-3">
-        <button className="border border-black hover:cursor-pointer"
-          onClick={() => setVisibleDate(subDays(visibleDate, 1))}>Previous Day</button>
-        <button className="border border-black hover:cursor-pointer"
-          onClick={() => setVisibleDate(addDays(visibleDate, 1))}>Next Day</button>
+        <BaseButton
+          onClick={() => setVisibleDate(subDays(visibleDate, 1))}>Previous Day</BaseButton>
+        <BaseButton
+          onClick={() => setVisibleDate(addDays(visibleDate, 1))}>Next Day</BaseButton>
       </div>
 
       <div className="flex flex-col gap-5 mt-10">

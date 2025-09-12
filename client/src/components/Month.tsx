@@ -1,6 +1,7 @@
 import { addMonths, eachWeekOfInterval, endOfMonth, endOfWeek, startOfMonth, startOfWeek, subMonths } from "date-fns";
 import { useState } from "react";
 import type { CalendarEvent } from "../api/events";
+import BaseButton from "./BaseButton";
 
 export default function Month(props: { calendarEvents?: CalendarEvent[] | null }) {
   const currentDate = new Date();
@@ -23,10 +24,10 @@ export default function Month(props: { calendarEvents?: CalendarEvent[] | null }
   return (
     <>
       <div className="flex gap-3">
-        <button className="border border-black hover:cursor-pointer"
-          onClick={() => setFirstVisibleDate(subMonths(firstVisibleDate, 1))}>Previous Month</button>
-        <button className="border border-black hover:cursor-pointer"
-          onClick={() => setFirstVisibleDate(addMonths(firstVisibleDate, 1))}>Next Month</button>
+        <BaseButton
+          onClick={() => setFirstVisibleDate(subMonths(firstVisibleDate, 1))}>Previous Month</BaseButton>
+        <BaseButton
+          onClick={() => setFirstVisibleDate(addMonths(firstVisibleDate, 1))}>Next Month</BaseButton>
       </div>
 
       <div className="flex flex-col gap-5 mt-10">

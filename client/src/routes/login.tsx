@@ -1,6 +1,7 @@
 import { SignedOut, SignInButton, useUser } from '@clerk/clerk-react';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useEffect } from 'react';
+import BaseButton from '../components/BaseButton';
 
 export const Route = createFileRoute('/login')({
   component: RouteComponent,
@@ -28,7 +29,7 @@ function RouteComponent() {
     <header className="p-2">
       <SignedOut>
         <SignInButton>
-          <button className="border cursor-pointer">Sign In</button>
+          <BaseButton>Sign In</BaseButton>
         </SignInButton>
       </SignedOut>
     </header>

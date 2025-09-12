@@ -1,6 +1,7 @@
 import { addDays, eachDayOfInterval, subDays } from "date-fns";
 import { useState } from "react";
 import type { CalendarEvent } from "../api/events";
+import BaseButton from "./BaseButton";
 
 export default function Week(props: {
   calendarEvents?: CalendarEvent[] | null;
@@ -24,18 +25,16 @@ export default function Week(props: {
 
   return (
     <>
-      <div className="flex gap-3">
-        <button
-          className="border border-black hover:cursor-pointer"
+      <div className="flex items-center justify-center gap-3">
+        <BaseButton
           onClick={() => setFirstVisibleDate(subDays(firstVisibleDate, 7))}
-        >Previous Week</button>
-        <button
-          className="border border-black hover:cursor-pointer"
+        >Previous Week</BaseButton>
+        <BaseButton
           onClick={() => setFirstVisibleDate(addDays(firstVisibleDate, 7))}
-        >Next Week</button>
+        >Next Week</BaseButton>
       </div>
 
-      <div className="flex flex-col gap-5 mt-10">
+      <div className="flex flex-col gap-5 mt-5">
         {datesToShow.map(dateItem => {
           const dateEvents = groupedCalendarEvents?.[dateItem.toLocaleDateString()];
           return (

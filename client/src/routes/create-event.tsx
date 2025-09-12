@@ -3,6 +3,7 @@ import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { createCalendarEvent } from '../api/events';
 import { useAuth, useUser } from '@clerk/clerk-react';
 import { isBefore } from 'date-fns';
+import BaseButton from '../components/BaseButton';
 
 export const Route = createFileRoute('/create-event')({
   component: RouteComponent,
@@ -77,12 +78,11 @@ function RouteComponent() {
         <input className="border" type="datetime-local" name="end" />
       </div>
 
-      <button
-        type="submit"
-        className="border hover:cursor-pointer">
+      <BaseButton
+        type="submit">
         {createEventMutation.isPending && "Working..."}
         {!createEventMutation.isPending && "Submit"}
-      </button>
+      </BaseButton>
     </form>
   </div>
 }

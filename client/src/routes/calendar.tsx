@@ -7,6 +7,7 @@ import { refreshCalendarData } from '../api/refresh';
 import Day from '../components/Day';
 import Month from '../components/Month';
 import Week from '../components/Week';
+import BaseButton from '../components/BaseButton';
 
 export const Route = createFileRoute('/calendar')({
   component: Calendar,
@@ -22,7 +23,6 @@ function Calendar() {
   }
 
   const [selectedView, setSelectedView] = useState("week")
-
   const queryClient = useQueryClient()
 
   // Executed when the user clicks the "Refresh Calendar Data" button
@@ -35,7 +35,7 @@ function Calendar() {
       return refreshCalendarData(token)
     },
     onSuccess: () => {
-      // Invalidate and refetch
+      // Invalidate events and refetch
       queryClient.invalidateQueries({ queryKey: ['calendar-events'] })
     },
   })
@@ -57,17 +57,14 @@ function Calendar() {
   }
 
   return (
-    <div className="p-2">
-      <button
-        className="border border-black hover:cursor-pointer"
+    <div className="p-2 flex flex-col gap-5">
+      <BaseButton
         onClick={() => refreshDataMutation.mutate()}
         disabled={refreshDataMutation.isPending}
       >
         {refreshDataMutation.isPending && "Refreshing DB data..."}
         {!refreshDataMutation.isPending && "Refresh Calendar Data"}
-      </button>
-
-      <br />
+      </BaseButton>
 
       <select
         className="border border-black"
